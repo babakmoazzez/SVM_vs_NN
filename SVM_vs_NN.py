@@ -1,7 +1,7 @@
 from tensorflow.python.keras.layers import Dense,Conv2D,Flatten,MaxPooling2D,ZeroPadding2D,Dropout,Softmax
 from sklearn.model_selection import train_test_split,GridSearchCV
+from tensorflow.keras.utils import to_categorical, plot_model
 from sklearn.metrics import classification_report
-from tensorflow.keras.utils import to_categorical
 from sklearn.neural_network import MLPClassifier
 from tensorflow.python.keras import Sequential
 from sklearn.datasets import fetch_lfw_people
@@ -75,7 +75,7 @@ y_predicted = NN[max(score)].predict(X_test)
 print(classification_report(y_test,y_predicted,target_names=names))
 
 #========================================================================================#
-   
+
 #Classification using Convolutional Neural Networks in Tensorflow/Keras
 model=Sequential()
 model.add(Conv2D(64,kernel_size=3,activation='relu',input_shape=(width,height,1)))
@@ -93,6 +93,7 @@ model.add(Dense(3840,activation='relu'))
 model.add(Dense(960,activation='relu'))
 model.add(Dense(K,activation='softmax'))
 
+
 #reshape to prepare input
 X_train=X_train.reshape(X_train.shape[0],width,height,1)
 X_test=X_test.reshape(X_test.shape[0],width,height,1)
@@ -102,6 +103,7 @@ y_test=to_categorical(y_test)
 
 
 model.compile(optimizer='Adamax',loss='categorical_crossentropy',metrics=['accuracy'])
+plot_model(model,show_shapes = True)
 model.fit(X_train,y_train,validation_data=(X_test,y_test),batch_size=100,epochs=25)
 
 score=model.evaluate(X_test,y_test,verbose=0)
@@ -109,7 +111,7 @@ print(score[1])
 
 y_predicted = model.predict(X_test)
 
-y_test = [np.argmax(i) for i in y_predicted]
+y_predicted = [np.argmax(i) for i in y_predicted]
 y_test = [np.argmax(i) for i in y_test]
 
 print(classification_report(y_test,y_predicted,target_names=names))
@@ -124,4 +126,3 @@ print(classification_report(y_test,y_predicted,target_names=names))
 
 
 
-    
